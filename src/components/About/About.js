@@ -29,10 +29,6 @@ const About = () => {
   }, []);
   return (
     <div className="about-content" id="about" data-scroll-section>
-      <div className="imgBox">
-        <img src={AboutImg} alt="aboutImg" className="metaHero" />
-      </div>
-
       <div className="textBox">
         <h2 id="hero-text">About Us</h2>
         <p id="hero-text">
@@ -52,6 +48,9 @@ const About = () => {
             Request A Loan
           </button>
         </div>
+      </div>
+      <div className="imgBox">
+        <img src={AboutImg} alt="aboutImg" className="metaHero" />
       </div>
     </div>
   );

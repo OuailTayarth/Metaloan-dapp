@@ -1,104 +1,99 @@
 .contacts {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    background-color: #000;
-    color: #fff;
-    padding: 110px 0px 50px;
-    /* padding-top: 50px; */
-    width: 100%;
-  }
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #000;
+  color: #fff;
+  padding: 60px 0px 50px 0px;
+  width: 100%;
+}
 
 .checkbox-container {
   display: flex;
 }
 
-
-.checkbox-container label  {
+.checkbox-container label {
   text-align: left;
   margin-left: 5px;
   line-height: 20px;
+  letter-spacing: 0.2px;
 }
 
 .contacts .title {
-    text-align: center;
-    margin: 40px 0 24px;
+  text-align: center;
+  margin: 40px 0 24px;
 }
 
 .contacts .title h1 {
-    font-size: 3.5rem;
-    font-weight: 700;
-    text-align: center;
-    letter-spacing: 0.5px;
+  font-size: 4.1rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.5px;
 }
 
 .contacts .title p {
-    font-size: 1.3em;
-    font-size: 500;
-    letter-spacing: 0.5px;
-    padding-top: 10px;
-    line-height: 25px;
-    max-width: 500px;
+  font-size: 1.1em;
+  font-size: 500;
+  letter-spacing: 0.5px;
+  padding-top: 10px;
+  line-height: 25px;
+  max-width: 500px;
 }
 
 .contacts .book-form {
-    position: relative;
-    padding: 0px 60px 60px 60px;
-    display: inline-block;
-    text-align: center;
-    
+  position: relative;
+  padding: 0px 60px 60px 60px;
+  display: inline-block;
+  text-align: center;
 }
 
 .contacts .book-form .inputBox {
-    display: flex;
-    margin-bottom: 20px;
-    margin-right: auto;
-    margin-left: auto;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  margin-bottom: 20px;
+  margin-right: auto;
+  margin-left: auto;
+  justify-content: center;
+  align-items: center;
 }
-
 
 .contacts .book-form .inputBox input,
 .contacts .book-form .inputBox textarea {
-    padding: 13px;
-    width: 100%;
-    font-size: 15px;
-    font-weight: 400;
-    color:#111;
-    outline: none;
-    font-family: inherit;
-    border-radius: 5px;
-    border: none;
-    
+  padding: 13px;
+  width: 100%;
+  font-size: 15px;
+  font-weight: 400;
+  color: #111;
+  outline: none;
+  font-family: inherit;
+  border-radius: 5px;
+  border: none;
 }
 
 .contacts .book-form .inputBox #uploadFile {
-    color: #fff;
+  color: #fff;
 }
 
-
-.contacts .book-form .inputBox input[type = "submit"] {
-    display: inline-block;
-    background:#aed2f4;
-    color: #000;
-    border: none;
-    height: 40px;
-    font-weight: 700;
-    margin-top: 10px;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: 0.5s;
-    border-radius: 5px;   
+.contacts .book-form .inputBox input[type="submit"] {
+  display: inline-block;
+  background: #aed2f4;
+  color: #000;
+  border: none;
+  height: 40px;
+  font-weight: 400;
+  margin-top: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.5s;
+  padding: 0 20px;
+  border-radius: 5px;
+  text-align: center;
 }
 
-
-
-.contacts .book-form .inputBox input[type = "submit"]:hover {
-    background:#383dda;
+.contacts .book-form .inputBox input[type="submit"]:hover {
+  background: #383dda;
 }
 
 .submit-alert {
@@ -107,49 +102,44 @@
   font-weight: 400;
 }
 
-
 @media screen and (min-width: 576px) {
-    .contacts {
-      width: 70%;
-    }
+  .contacts {
+    width: 70%;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .contacts {
+    width: 55%;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .contacts {
+    width: 45%;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .contacts {
+    width: 35%;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .contacts .title p {
+    font-size: 1em;
+    max-width: 320px;
+  }
+}
+
+@media (max-width: 485px) {
+  .contacts .book-form .inputBox input[type="submit"] {
+    height: 36px;
+    font-size: 12px;
   }
 
-  @media screen and (min-width: 768px) {
-    .contacts {
-      width: 55%;
-    }
+  .contacts .title h2 {
+    font-size: 2.7em;
   }
-
-  @media screen and (min-width: 992px) {
-    .contacts {
-      width: 45%;
-    }
- 
-  }
-
-  @media screen and (min-width: 1200px) {
-    .contacts {
-      width: 35%;
-    }
-
-  }
-
-  @media screen and (max-width: 420px) {
-    .contacts .title p {
-        font-size: 1em;
-        max-width: 320px;
-    }
-  }
-
-
-  @media (max-width: 485px) {
-    .contacts .book-form .inputBox input[type = "submit"] {
-      height: 36px;
-      font-size: 12px;
-    }
-
-    .contacts .title h2 {
-      font-size: 2.7em;
-    }
-    
 }

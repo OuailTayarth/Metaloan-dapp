@@ -50,12 +50,6 @@ const Navbar = () => {
         </li>
 
         <li>
-          <Link to="/faq" onClick={closeMobileMenu}>
-            FAQ
-          </Link>
-        </li>
-
-        <li>
           <Link to="/requestloan" id="lastchild" onClick={closeMobileMenu}>
             Request a Loan
           </Link>
