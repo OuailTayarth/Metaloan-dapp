@@ -20,7 +20,6 @@ import ContactForm from "./components/ContactForm/ContactForm";
 import Admin from "./components/Admin/Admin";
 import HowItoWorks from "./components/HowItWorks/HowItoWorks";
 import ERC20ABI from "./ERC20ABI.json";
-import FAQ from "./components/FAQ/FAQ";
 import OurTeam from "./components/OurTeam/OurTeam";
 import Loader from "./components/Loader/Loader";
 import Home from "./components/Home";
@@ -50,10 +49,6 @@ function App() {
       dispatch(fetchData(blockchain.account));
     }
   }, [blockchain.smartContract, dispatch]);
-
-  // useEffect(()=> {
-  //   navigate("/", {replace: true});
-  // },[]);
 
   // ShowAlert
   function showAlert(show = false, msg = "") {
@@ -289,8 +284,6 @@ function App() {
               path="/requestloan"
               element={<ContactForm removeAlert={showAlert} alert={alert} />}
             />
-
-            {/* <Route path="/faq" element={<FAQ/>}/> */}
             <Route
               path="/admin"
               element={
@@ -309,8 +302,7 @@ function App() {
                   fetchLoanData={fetchLoanData}
                   fetchBorrowersData={fetchBorrowersData}
                 />
-              }
-            >
+              }>
               <Route
                 path="submitLoan"
                 element={
@@ -355,13 +347,9 @@ function App() {
                 path="borrowers"
                 element={<FetchBorrowers BorrowersData={BorrowersData} />}
               />
-
-              {/* <Route path="createPlan"
-                  element={<CreatePlan createPlan={createPlan}/>}/> */}
             </Route>
           </Routes>
-          {/* <ContactForm removeAlert={showAlert}
-                       alert={alert}/> */}
+
           <Footer />
         </>
       )}

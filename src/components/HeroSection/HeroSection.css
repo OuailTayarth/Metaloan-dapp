@@ -1,144 +1,133 @@
 .content {
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 71px 0px;
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 71px 70px;
 }
 
 .LineChildren {
-    transform: translate(0, 500px);
-    padding-top:2px; 
+  transform: translate(0, 500px);
+  padding-top: 2px;
 }
 
-/* .text-Header.bottom {
-    padding-bottom: 20px;
-} */
-
-
 .LineParents {
-   overflow: hidden;
-   
-} 
+  overflow: hidden;
+}
 
 .content .textBox {
-    position: relative;
-    max-width: 500px;
-    margin-left: 50px;
+  position: relative;
+  max-width: 500px;
+  margin-left: 50px;
 }
 
 .content .textBox h2 {
-    color: #fff;
-    font-size: 5em;
-    line-height: 1em;
-    margin-top: 25px;
+  color: #fff;
+  font-size: 5em;
+  line-height: 1em;
+  margin-top: 6px;
 }
 
 .content .textBox h4 {
-    color: #fffca1 ;
-    font-size: 1em;
-    line-height: 1em;
-    margin-top: 20px;
-    letter-spacing: 0.5px;
+  color: #fffca1;
+  font-size: 1em;
+  line-height: 1em;
+  margin-top: 20px;
+  letter-spacing: 0.5px;
 }
 
 .content .textBox p {
-    font-size: 1.1em;
-    padding-bottom: 20px;
-    line-height: 21px;
-    color: #a4a9ac;
-    font-weight: 400;
+  font-size: 16px;
+  padding-bottom: 16px;
+  line-height: 21px;
+  color: #a4a9ac;
+  font-weight: 400;
 }
 
 .content .imgBox {
-    width: 600px;
-    display: flex;
-    justify-content: flex-end;
-    padding-right: 50px;
+  width: 600px;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 50px;
 }
 
 .content .imgBox img {
-    max-width: 662px;
+  max-width: 662px;
 }
 
 .button-container #btn-left {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
-
-.content .play{
-    position: relative;
-    display: inline-flex;
-    justify-content: flex-start;
-    align-items: center;
-    text-decoration: none;
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-weight: 400;
-    font-size: 1em;
+.content .play {
+  position: relative;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 400;
+  font-size: 1em;
 }
 
 .content .play img {
-    max-width: 45px;
-    margin-right: 10px;
-    cursor: pointer;
+  max-width: 45px;
+  margin-right: 10px;
+  cursor: pointer;
 }
 
 .content .btn {
-    height: 40px;
-    width: 157px;
-    background-color: #aed2f4;
-    border: none;
-    color: #000;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease-in-out;
-    font-weight: 700;
-    font-size: 13px;
+  height: 40px;
+  width: 157px;
+  background-color: #aed2f4;
+  border: none;
+  color: #000;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  font-weight: 500;
+  font-size: 13px;
 }
 
 .content .btn:hover {
-    transform: translateY(-6%);
+  transform: translateY(-6%);
 }
 
+@media (max-width: 991px) {
+  .content {
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    padding-top: 132px;
+  }
 
-@media (max-width:991px) {
-    .content {
-        justify-content: center;
-        align-items: flex-start;
-        flex-direction:column;
-        padding-top: 132px;
-    }
-
-    .content .imgBox {
-        display: none;
-    }
-
+  .content .imgBox {
+    display: none;
+  }
 }
-
 
 @media (max-width: 485px) {
-    .content .textBox h4 {
-        font-size: 0.8em;
-    }
+  .content .textBox h4 {
+    font-size: 0.8em;
+  }
 
-    .content .textBox h2 {
-        font-size: 3.8em;
-    }
+  .content .textBox h2 {
+    font-size: 3.8em;
+  }
 
-    .content .textBox p {
-        font-size: 1em;
-    }
-    
-    .content .btn {
-        height: 36px;
-        width: 147px;
-        font-size: 12px;
-    }
+  .content .textBox p {
+    font-size: 1em;
+  }
 
-    .content .textBox {
-        margin-left: 30px;
-    }
+  .content .btn {
+    height: 36px;
+    width: 147px;
+    font-size: 12px;
+  }
+
+  .content .textBox {
+    margin-left: 30px;
+  }
 }

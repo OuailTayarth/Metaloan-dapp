@@ -78,9 +78,9 @@ video {
 
 body {
   background-color: #030303;
-  font-family: "Josefin Sans", sans-serif;
+  font-family: "Poppins", sans-serif;
   min-height: 100vh;
-  color: #D4D4D4;
+  color: #d4d4d4;
 }
 
 a {
@@ -95,10 +95,10 @@ li {
   padding: 11px 15px;
   color: black;
   background: #fff;
-  transition: background 0.5s ;
+  transition: background 0.5s;
   text-transform: uppercase;
   cursor: pointer;
-  border:none;
+  border: none;
   border-radius: 5px;
   font-size: 13px;
   font-weight: 600;

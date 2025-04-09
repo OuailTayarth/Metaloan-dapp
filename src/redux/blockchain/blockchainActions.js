@@ -3,7 +3,6 @@ import Web3 from "web3";
 import Web3EthContract from "web3-eth-contract";
 import { fetchData } from "../data/dataActions";
 
-
 const connectRequest = () => {
   return {
     type: "CONNECTION_REQUEST",
@@ -31,16 +30,14 @@ const updateAccountRequest = (payload) => {
   };
 };
 
-
 export const connect = () => {
   return async (dispatch) => {
     dispatch(connectRequest());
     const abiResponse = await fetch("/config/abi.json", {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json"
-        },
-
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
     });
 
     const ABI = await abiResponse.json();
@@ -48,20 +45,17 @@ export const connect = () => {
     const configResponse = await fetch("/config/config.json", {
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/json"
+        Accept: "application/json",
       },
+    });
 
-  });
+    const CONFIG = await configResponse.json();
 
-
-  const CONFIG = await configResponse.json();
-
-  const { ethereum } = window;
-  const metamaskIsInstalled = ethereum && ethereum.isMetaMask;
-
+    const { ethereum } = window;
+    const metamaskIsInstalled = ethereum && ethereum.isMetaMask;
 
     if (metamaskIsInstalled) {
-      console.log("MetaMask Here!")
+      console.log("MetaMask Here!");
       // Helper package to create an object with the smart contract
       Web3EthContract.setProvider(ethereum);
 
@@ -72,7 +66,7 @@ export const connect = () => {
           method: "eth_requestAccounts",
         });
 
-        console.log("Accounts from Redux",accounts[0]);
+        console.log("Accounts from Redux", accounts[0]);
 
         // Get the network version aka network Id of the network that we are connected wit it in metamask
         const networkId = await window.ethereum.request({
@@ -90,10 +84,10 @@ export const connect = () => {
               account: accounts[0],
               smartContract: SmartContractObj,
               web3: web3,
-              walletConnected: true
+              walletConnected: true,
             })
           );
-          
+
           // add the connection in the local storage to still connected on refresh
           localStorage.setItem("isWalletConnected", true);
 
@@ -101,7 +95,7 @@ export const connect = () => {
           ethereum.on("accountsChanged", (accounts) => {
             dispatch(updateAccount(accounts[0]));
           });
-          
+
           ethereum.on("chainChanged", () => {
             window.location.reload();
           });
