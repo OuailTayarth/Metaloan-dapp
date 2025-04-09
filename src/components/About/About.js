@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import "./About.css";
-import AboutImg from "../../assets/aboutUs.jpg";
+import AboutImg from "../../../src/assets/AboutUs.jpg";
 import { useNavigate } from "react-router-dom";
 import SplitText from "../../Utilis/split3.min";
 import gsap from 'gsap';

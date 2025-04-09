@@ -4,10 +4,8 @@ const initialState = {
   smartContract: null,
   web3: null,
   errorMsg: "",
-  walletConnected: false
+  walletConnected: false,
 };
-
-// console.log(initialState);
 
 const blockchainReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -15,7 +13,7 @@ const blockchainReducer = (state = initialState, action) => {
       return {
         ...initialState,
         loading: false,
-        walletConnected: false
+        walletConnected: false,
       };
     case "CONNECTION_SUCCESS":
       return {
@@ -24,7 +22,7 @@ const blockchainReducer = (state = initialState, action) => {
         account: action.payload.account,
         smartContract: action.payload.smartContract,
         web3: action.payload.web3,
-        walletConnected: true
+        walletConnected: true,
       };
     case "CONNECTION_FAILED":
       return {
@@ -36,7 +34,7 @@ const blockchainReducer = (state = initialState, action) => {
       return {
         ...state,
         account: action.payload.account,
-        walletConnected: false
+        walletConnected: false,
       };
     default:
       return state;
