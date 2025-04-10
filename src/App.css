@@ -76,6 +76,10 @@ video {
   text-decoration: none;
 }
 
+html {
+  scroll-padding-top: 95px;
+}
+
 body {
   background-color: #030303;
   font-family: "Poppins", sans-serif;
@@ -113,7 +117,12 @@ li {
 }
 
 .App {
-  /* max-width: 1440px; */
   width: 100%;
   margin: auto;
+}
+
+@media (max-width: 991px) {
+  html {
+    scroll-padding-top: 50px; /* Adjust if navbar height differs */
+  }
 }

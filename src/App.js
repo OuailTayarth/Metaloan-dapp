@@ -13,7 +13,6 @@ import FetchLoan from "./components/UserPages/FetchLoan/FetchLoan";
 import FetchBorrowers from "./components/UserPages/FetchBorrowers/FetchBorrowers";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
-import HeroSection from "./components/HeroSection/HeroSection";
 import About from "./components/About/About";
 import Footer from "./components/Footer/Footer";
 import ContactForm from "./components/ContactForm/ContactForm";
@@ -23,6 +22,10 @@ import ERC20ABI from "./ERC20ABI.json";
 import OurTeam from "./components/OurTeam/OurTeam";
 import Loader from "./components/Loader/Loader";
 import Home from "./components/Home";
+import config from "./config/config.json";
+import metaloanInterface from "../src/config/abi.json";
+import { ethers } from "ethers";
+import Web3Modal from "web3modal";
 let web3 = new Web3(window.ethereum);
 
 function App() {
@@ -34,7 +37,6 @@ function App() {
   const [BorrowersData, setBorrowersData] = useState([]);
   const [alert, setAlert] = useState({ show: false, msg: "" });
   const [activePayment, setActivePayment] = useState(false);
-  const [isBorrowerAddress, setBorrowerAddress] = useState();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -69,7 +71,7 @@ function App() {
     onPageConnected();
   }, []);
 
-  // Increment Loan Id
+  // Increment loan Id
   function incrementLoanId() {
     let newLoanId = loanId + 1;
     if (newLoanId > 100) {
@@ -78,7 +80,7 @@ function App() {
     setLoanId(newLoanId);
   }
 
-  // Decrement Loan Id
+  // Decrement loan Id
   function decrementLoanId() {
     let newLoanId = loanId + 1;
     if (newLoanId > 0) {
@@ -87,168 +89,196 @@ function App() {
     setLoanId(newLoanId);
   }
 
-  // Function to request a loan for a specific loan plan
+  /**
+   * Requests and activates a loan plan
+   */
   async function getLoan() {
     showAlert(true, "Welcome to MetaLoan, your payment is processing...!");
     setActivePayment(true);
 
-    /* Get Plan Information */
-    let plan = await blockchain.smartContract.methods.idToPlan(loanId).call();
-    let tokenPayment = plan.tokenPayment;
-    let upfrontPayment = plan.upfrontPayment;
+    try {
+      // Connect with Web3Modal and get signer
+      const web3Modal = new Web3Modal();
+      const connection = await web3Modal.connect();
+      const provider = new ethers.providers.Web3Provider(connection);
+      const signer = provider.getSigner();
 
-    /* Create Instance of USDC || USDT smart contracts to approve metaloan contracts.*/
-    let stableTokenContract = new web3.eth.Contract(ERC20ABI, tokenPayment);
+      // MetaLoan contract instance
+      const metaloanContract = new ethers.Contract(
+        config.CONTRACT_ADDRESS,
+        metaloanInterface.abi,
+        signer
+      );
 
-    const MetaLoanAddress = "0xA3b2C7cE6f2788148EBfc65BeB4Cb04cb3BDe46E";
+      // Fetch plan details
+      const plan = await metaloanContract.idToPlan(loanId);
+      const tokenPayment = plan.tokenPayment;
+      const upfrontPayment = plan.upfrontPayment;
 
-    /** 
-      * We can't use to param: because we are approving not transferring funds.
-      * NOTE: In order to transfer funds from a user wallet to another wallet throught a third party contract(Metaloan contract)
-        the USER MUST APPROVE the third party contract to spend his tokens and his behalf.
-      * The approve function should come firt and should be implemented in the daap not in the smart contract.
-     */
-    stableTokenContract.methods
-      .approve(MetaLoanAddress, upfrontPayment)
-      .send({
-        from: blockchain.account,
-        maxPriorityFeePerGas: null,
-        maxFeePerGas: null,
-      })
-      .once("error", (err) => {
-        let error = err.toString();
-        console.log(error);
-        console.log(err);
-        setActivePayment(false);
-        showAlert(true, "Something went wrong...!");
-      })
-      .then((receipt) => {
-        blockchain.smartContract.methods
-          .requestLoan(loanId)
-          .send({
-            from: blockchain.account,
-            maxPriorityFeePerGas: null,
-            maxFeePerGas: null,
-          })
-          .once("error", (err) => {
-            let error = err.toString();
-            console.log(error);
-            setActivePayment(false);
-            showAlert(true, "Something went wrong...!");
-          })
-          .then((receipt) => {
-            console.log(receipt);
-            setActivePayment(false);
-            showAlert(
-              true,
-              "Congratulations, your loan has been submitted successfully!"
-            );
-            dispatch(fetchData(blockchain.account));
-          });
-      });
+      // ERC20 token contract instance
+      const stableTokenContract = new ethers.Contract(
+        tokenPayment,
+        ERC20ABI,
+        signer
+      );
+
+      // Approve MetaLoan to spend tokens
+      const approveTx = await stableTokenContract.approve(
+        config.CONTRACT_ADDRESS,
+        upfrontPayment
+      );
+      await approveTx.wait();
+
+      // Request the loan
+      const requestLoanTx = await metaloanContract.requestLoan(loanId);
+      await requestLoanTx.wait();
+
+      // Success handling
+      setActivePayment(false);
+      showAlert(
+        true,
+        "Congratulations, your loan has been submitted successfully!"
+      );
+      // Uncomment and adjust if you have a data fetch function
+      // dispatch(fetchData(await signer.getAddress()));
+    } catch (err) {
+      console.error(err);
+      setActivePayment(false);
+      showAlert(true, "Something went wrong...!");
+    }
   }
 
-  /* Function to make a monthly payment */
+  /**
+   * Pay and records a monthly loan payment
+   */
   async function payLoan() {
     setActivePayment(true);
     showAlert(true, "Happy to see you, your payment is processing...!");
 
-    /* Get Plan Information */
-    let plan = await blockchain.smartContract.methods.idToPlan(loanId).call();
-    console.log(plan);
-    let tokenPayment = plan.tokenPayment;
-    let monthlyPayment = plan.monthlyPayment;
+    try {
+      // Step 1: Connect to the user's wallet using Web3Modal
+      const web3Modal = new Web3Modal();
+      const connection = await web3Modal.connect();
+      const provider = new ethers.providers.Web3Provider(connection);
+      const signer = provider.getSigner();
 
-    /* Create Instance of USDC tokens */
-    let stableTokenContract = new web3.eth.Contract(ERC20ABI, tokenPayment);
+      // Step 2: Create MetaLoan contract instance
+      const metaloanContract = new ethers.Contract(
+        config.CONTRACT_ADDRESS, // e.g., "0xA3b2C7cE6f2788148EBfc65BeB4Cb04cb3BDe46E"
+        metaloanInterface.abi,
+        signer
+      );
 
-    const MetaLoanAddress = "0xA3b2C7cE6f2788148EBfc65BeB4Cb04cb3BDe46E";
+      // Step 3: Fetch plan details using loanId
+      const plan = await metaloanContract.idToPlan(loanId);
+      const tokenPayment = plan.tokenPayment; // Address of the ERC20 token (e.g., USDC)
+      const monthlyPayment = plan.monthlyPayment; // Amount to pay
 
-    stableTokenContract.methods
-      .approve(MetaLoanAddress, monthlyPayment)
-      .send({
-        from: blockchain.account,
-        maxPriorityFeePerGas: null,
-        maxFeePerGas: null,
-      })
-      .once("error", (err) => {
-        console.log(err);
-        setActivePayment(false);
-        showAlert(true, "Something went wrong...!");
-      })
-      .then((receipt) => {
-        blockchain.smartContract.methods
-          .payLoan(loanId)
-          .send({
-            from: blockchain.account,
-            maxPriorityFeePerGas: null,
-            maxFeePerGas: null,
-          })
-          .once("error", (error) => {
-            console.log(error);
-            setActivePayment(false);
-            showAlert(true, "Something went wrong...!");
-          })
-          .then((receipt) => {
-            console.log(receipt);
-            setActivePayment(false);
-            showAlert(
-              true,
-              "Congratulations, your monthly payment has been submitted successfully!"
-            );
-            dispatch(fetchData(blockchain.account));
-          });
-      });
+      // Step 4: Create ERC20 token contract instance
+      const stableTokenContract = new ethers.Contract(
+        tokenPayment,
+        ERC20ABI,
+        signer
+      );
+
+      // Step 5: Approve MetaLoan contract to spend tokens
+      const approveTx = await stableTokenContract.approve(
+        config.CONTRACT_ADDRESS,
+        monthlyPayment
+      );
+      await approveTx.wait(); // Wait for transaction confirmation
+
+      // Step 6: Execute the loan payment
+      const payLoanTx = await metaloanContract.payLoan(loanId);
+      await payLoanTx.wait(); // Wait for transaction confirmation
+
+      // Step 7: Handle success
+      setActivePayment(false);
+      showAlert(
+        true,
+        "Congratulations, your monthly payment has been submitted successfully!"
+      );
+      dispatch(fetchData(await signer.getAddress())); // Update data if applicable
+    } catch (err) {
+      // Step 8: Handle errors
+      console.error(err);
+      setActivePayment(false);
+      showAlert(true, "Something went wrong...!");
+    }
   }
 
-  /* Function that fetch a single user loan*/
+  /**
+   * Fetches and loads the user's loan data from the blockchain.
+   */
   async function fetchLoanData() {
-    /* User Account */
-    const userAccount = await blockchain.account;
+    try {
+      // Step 1: Connect to the user's wallet using Web3Modal
+      const web3Modal = new Web3Modal();
+      const connection = await web3Modal.connect();
+      const provider = new ethers.providers.Web3Provider(connection);
+      const signer = provider.getSigner();
+      const userAccount = await signer.getAddress(); // Get the user's account address
 
-    /* Get Loan information */
-    const data = await blockchain.smartContract.methods
-      .fetchMyLoan(userAccount, loanId)
-      .call();
+      // Step 2: Create MetaLoan contract instance
+      const metaloanContract = new ethers.Contract(
+        config.CONTRACT_ADDRESS, // e.g., "0xA3b2C7cE6f2788148EBfc65BeB4Cb04cb3BDe46E"
+        metaloanInterface.abi,
+        provider // Use provider for read-only calls
+      );
 
-    /* Get the total Payment of each wallet */
-    const paymentData = await blockchain.smartContract.methods
-      .totalPaymentPerWallet(userAccount)
-      .call();
-    const totalPaymentPerWallet = paymentData / 1000000;
+      // Step 3: Fetch loan information for the user and loanId
+      const data = await metaloanContract.fetchMyLoan(userAccount, loanId);
 
-    /* Loan information */
+      // Step 4: Fetch total payment for the user's wallet
+      const paymentData = await metaloanContract.totalPaymentPerWallet(
+        userAccount
+      );
+      const totalPaymentPerWallet = ethers.utils.formatUnits(paymentData, 6); // Assuming 6 decimals for USDC/USDT
 
-    // const status = (data.activated).toString();
-    let startDay = moment.unix(data.start).toString();
-    let nextPayment = moment.unix(data.nextPayment).toString();
-    let borrowerAddress = data.borrower.toString();
+      // Step 5: Process loan data
+      const startDay = moment.unix(data.start).toString();
+      const nextPayment = moment.unix(data.nextPayment).toString();
+      const borrowerAddress = data.borrower.toString().toLowerCase();
 
-    setBorrowerAddress(borrowerAddress.toLowerCase());
+      setBorrowerAddress(borrowerAddress);
 
-    // {status == true ? "Active" : ""}
+      const item = {
+        borrower: borrowerAddress,
+        startLoan: startDay,
+        nextPayment: nextPayment,
+        totalPayment: totalPaymentPerWallet,
+        activated: "Active", // Assuming 'activated' is a boolean or string in the contract
+      };
 
-    let item = {
-      borrower: borrowerAddress,
-      startLoan: startDay,
-      nextPayment: nextPayment,
-      totalPayment: totalPaymentPerWallet,
-      activated: "Active",
-    };
-
-    setLoanData(item);
+      setLoanData(item);
+    } catch (err) {
+      console.error("Error fetching loan data:", err);
+      showAlert(true, "Something went wrong...!");
+    }
   }
 
-  // fetch borrowers Data
+  /**
+   * Fetches and loads all borrowers' data from the blockchain.
+   */
   async function fetchBorrowersData() {
-    /* Get all borrowers */
-    const data = await blockchain.smartContract.methods
-      .fetchAllBorrowers()
-      .call();
+    try {
+      // Set up the provider
+      const provider = new ethers.providers.JsonRpcProvider(
+        "https://sepolia.infura.io/v3/184b35311791483b991c8951bb07c56c"
+      );
 
-    /* Fetch all borrowers */
-    let items = await Promise.all(
-      data.map(async (el) => {
+      // create contract's instance
+      const metaloanContract = new ethers.Contract(
+        config.CONTRACT_ADDRESS,
+        metaloanInterface.abi,
+        provider
+      );
+
+      // fetch all borrowers from the contract
+      const data = await metaloanContract.fetchAllBorrowers();
+
+      /* Fetch all borrowers */
+      let items = data.map((el) => {
         /* All borrowers information */
         // const status = (el.activated).toString();
         let startDay = moment.unix(el.start).toString();
@@ -263,9 +293,11 @@ function App() {
         };
 
         return item;
-      })
-    );
-    setBorrowersData(items);
+      });
+      setBorrowersData(items);
+    } catch (err) {
+      console.error("Error fetching borrowers data:", err);
+    }
   }
 
   return (
@@ -342,7 +374,6 @@ function App() {
                   />
                 }
               />
-
               <Route
                 path="borrowers"
                 element={<FetchBorrowers BorrowersData={BorrowersData} />}

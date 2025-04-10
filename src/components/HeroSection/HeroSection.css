@@ -4,7 +4,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 71px 70px;
+  padding: 120px 70px;
 }
 
 .LineChildren {
@@ -18,13 +18,13 @@
 
 .content .textBox {
   position: relative;
-  max-width: 500px;
+  max-width: 378px;
   margin-left: 50px;
 }
 
 .content .textBox h2 {
   color: #fff;
-  font-size: 4.3em;
+  font-size: 5.5em;
   line-height: 1em;
   margin-top: 6px;
 }

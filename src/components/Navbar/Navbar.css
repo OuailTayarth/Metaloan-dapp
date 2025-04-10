@@ -9,6 +9,7 @@ header {
   padding: 40px 50px;
   z-index: 10000;
   transition: 0.5s;
+  min-height: 95px;
 }
 
 header .logo span {

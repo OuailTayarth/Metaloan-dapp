@@ -5,6 +5,7 @@
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@openzeppelin/contracts": "^5.2.0",
+    "ethers": "5.4",
     "gsap": "^3.12.7",
     "hardhat": "^2.22.19",
     "moment": "^2.30.1",
@@ -45,5 +46,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@nomiclabs/hardhat-waffle": "^2.0.6"
   }
 }

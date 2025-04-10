@@ -6,19 +6,16 @@ import About from "../components/About/About";
 import OurTeam from "../components/OurTeam/OurTeam";
 import ContactForm from "../components/ContactForm/ContactForm";
 
-
-
 const Home = () => {
-    return (
-        <>   
-            <HeroSection />
-            <HowItoWorks/>
+  return (
+    <>
+      <HeroSection />
+      {/* <HowItoWorks/>
             <About />
             <OurTeam />
-            <ContactForm />
-        </>
-
-    )
-}
+            <ContactForm /> */}
+    </>
+  );
+};
 
 export default Home;

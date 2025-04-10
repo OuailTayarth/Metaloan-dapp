@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import "./HowItoWorks.css";
-// import metaHeroImg from "../../assets/metaHero.png";
 import HowItWorks from "../../../src/assets/HowItWorks.jpg";
 import { useNavigate } from "react-router-dom";
 import SplitText from "../../Utilis/split3.min";
@@ -31,7 +30,10 @@ const HowItoWorks = () => {
 
   return (
     <>
-      <div className="howItWorks-content" id="howitworks" data-scroll-section>
+      <section
+        className="howItWorks-content"
+        id="howitworks"
+        data-scroll-section>
         <div className="imgBox">
           <img src={HowItWorks} alt="aboutImg" className="metaHero" />
         </div>
@@ -67,7 +69,7 @@ const HowItoWorks = () => {
             </button>
           </div>
         </div>
-      </div>
+      </section>
     </>
   );
 };
